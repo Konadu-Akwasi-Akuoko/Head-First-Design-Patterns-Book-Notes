@@ -1,6 +1,6 @@
 package org.example.Ducks;
 
-public class MallardDucks extends Duck {
+public class MallardDucks extends Duck implements FlyBehaviour, QuackBehaviour, SwimBehaviour {
     @Override
     public String display() {
         return "I am a Mallard Duck";
@@ -16,5 +16,10 @@ public class MallardDucks extends Duck {
     public void swim(String name) {
         System.out.println("The " + name + " is swimming");
 
+    }
+
+    @Override
+    public void fly() {
+        System.out.println("I'm flying with wings!!");
     }
 }

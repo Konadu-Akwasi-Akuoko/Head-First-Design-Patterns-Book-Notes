@@ -15,4 +15,10 @@ public class DecoyDuck extends Duck {
     public void swim(String name) {
 //        DecoyDuck cannot swim
     }
+
+    @Override
+    public void fly() {
+//        DecoyDuck cannot fly
+
+    }
 }
