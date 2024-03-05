@@ -338,12 +338,99 @@ public class Cat extends Animal {
 In this example, `Cat` is a concrete class that extends the abstract class `Animal` and
 provides an implementation for the `makeSound` method.
 
-In summary, the main difference between concrete and abstract classes is that you can
-create instances of concrete classes, but not of abstract classes. Abstract classes are
-designed to be extended by subclasses, which provide implementations for the abstract
-methods.
+## Encapsulate What Varies And Program To An Interface, Not An Implementation
 
-Source: Conversation with Bing, 3/4/2024
-(1) undefined. https://github.com/Calebosam/aws-hackathon.git.
-(2) undefined. https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh.
+Absolutely, let's break down the code you provided:
 
+1. **Encapsulate What Varies**: In your code, the behaviors that vary are encapsulated in
+   the `FlyBehaviour` and `QuackBehaviour` interfaces. Different ducks can have different
+   implementations of these behaviors. For example, the `MallardDuck` class has a `Quack`
+   behavior and a `FlyWithWings` behavior. If you wanted to create a new type of duck that
+   doesn't fly, you could create a new class (let's call it `NoFly`) that
+   implements `FlyBehaviour` and does nothing in the `fly` method. Then, you could use
+   this new behavior in your new duck class.
+
+```java
+interface QuackBehaviour {
+    void quack();
+}
+
+
+interface FlyBehaviour {
+    void fly();
+}
+
+
+public class NoFly implements FlyBehaviour {
+    public void fly() {
+        System.out.println("I can't fly");
+    }
+}
+
+public class Squeak implements QuackBehaviour {
+    public void quack() {
+        System.out.println("Squeak");
+    }
+}
+
+public class RubberDuck extends Duck {
+    public RubberDuck() {
+        quackBehaviour = new Squeak(); // Assuming Squeak is another behavior that implements QuackBehaviour
+        flyBehaviour = new NoFly();
+    }
+
+    @Override
+    public String display() {
+        return "I am a Rubber Duck";
+    }
+}
+```
+
+2. **Program to an Interface, Not an Implementation**: In your code, the `Duck` class is
+   programmed to an interface, not an implementation. It has references to `FlyBehaviour`
+   and `QuackBehaviour` objects, which are interfaces. The specific behaviors are set in
+   the subclasses (like `MallardDuck`). This means you can change the flying and quacking
+   behavior of any duck dynamically.
+
+```java
+public abstract class Duck {
+
+   FlyBehaviour flyBehaviour;
+   QuackBehaviour quackBehaviour;
+
+   public static void main(String[] args) {
+      System.out.println("Duck class");
+   }
+
+   public abstract String display();
+
+   public void performFly() {
+      flyBehaviour.fly();
+   }
+
+   public void performQuack() {
+      quackBehaviour.quack();
+   }
+}
+
+public class FlyWithWings implements FlyBehaviour {
+
+   public void fly() {
+      System.out.println("I'm flying with wings!!");
+   }
+}
+
+
+Duck rubberDuck = new RubberDuck();
+rubberDuck.performFly(); // Outputs: I can't fly
+rubberDuck.performQuack(); // Outputs: Squeak
+
+// Now let's change the fly behavior dynamically
+rubberDuck.flyBehaviour = new FlyWithWings();
+rubberDuck.performFly(); // Outputs: I'm flying with wings!!
+```
+
+These principles make your code more flexible and easier to maintain and extend. Changes
+to the flying or quacking behavior of a duck will not affect other parts of your code. You
+can add new behaviors or new types of ducks without modifying the existing classes. This
+is why these principles are widely used in real-world applications.
